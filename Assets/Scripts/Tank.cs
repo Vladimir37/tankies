@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +9,19 @@ public abstract class Tank : MonoBehaviour
 
     private Rigidbody2D myRigidbody;
 
+    [SerializeField]
+    private Transform tankSprite;
+
+    [SerializeField]
+    private GameObject bulletPrefab;
+
     private int health;
 
     private int speed;
+
+    private float attackCooldown;
+
+    private float timeFromLastAttack;
 
     private bool isMoved;
 
@@ -20,7 +31,6 @@ public abstract class Tank : MonoBehaviour
     public virtual void Start()
     {
         isMoved = false;
-        speed = 5;
         myRigidbody = GetComponent<Rigidbody2D>();
         direction = DirectionManager.Instance.Directions[CardinalPoint.North];
     }
@@ -28,17 +38,33 @@ public abstract class Tank : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-        //
+        timeFromLastAttack += Time.deltaTime;
+        
+        if (isMoved)
+        {
+            myRigidbody.velocity = MyDirection.MyDirectionVector.normalized * speed;
+        }
+        else
+        {
+            myRigidbody.velocity = Vector2.zero;
+        }
+    }
+
+    protected void TankInitialize(int tankHealth, int tankSpeed, float tankFireCooldown)
+    {
+        health = tankHealth;
+        speed = tankSpeed;
+        attackCooldown = tankFireCooldown;
     }
 
     protected void Move()
     {
-        myRigidbody.velocity = MyDirection.MyDirectionVector.normalized * speed;
+        isMoved = true;
     }
 
     protected void Stop()
     {
-        myRigidbody.velocity = Vector2.zero;
+        isMoved = false;
     }
 
     protected void ChangeDirection(Direction newDirection)
@@ -48,13 +74,36 @@ public abstract class Tank : MonoBehaviour
             return;
         }
         
+        // Позиция при развороте
         if (MyDirection.MyOrientation != newDirection.MyOrientation)
         {
-            // TODO выравнивание по тайлам
+            if (newDirection.MyOrientation == Orientation.Horizontal)
+            {
+                transform.position = new Vector3(transform.position.x, CalculatePosition(transform.position.y), 0);
+            }
+            else if (newDirection.MyOrientation == Orientation.Vertical)
+            {
+                transform.position = new Vector3(CalculatePosition(transform.position.x), transform.position.y, 0);
+            }
         }
-
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, newDirection.MyRotation));
-
+        
         direction = newDirection;
+        tankSprite.rotation = Quaternion.Euler(new Vector3(0, 0, MyDirection.MyRotation));
+    }
+
+    protected void Attack()
+    {
+        if (timeFromLastAttack >= attackCooldown)
+        {
+            timeFromLastAttack = 0;
+
+            Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity).GetComponent<Bullet>();
+            bullet.Initialize(MyDirection, 10);
+        }
+    }
+
+    private float CalculatePosition(float position)
+    {
+        return (float)Math.Round(position * 2, MidpointRounding.AwayFromZero) / 2;
     }
 }

@@ -15,6 +15,9 @@ public class Player : Tank
     // Start is called before the first frame update
     public override void Start()
     {
+        // DEBUG
+        TankInitialize(5, 5, 1);
+        
         base.Start();
     }
 
@@ -22,12 +25,22 @@ public class Player : Tank
     public override void Update()
     {
         base.Update();
+        
+        GetInput();
+    }
+
+    private void GetInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Attack();
+        }
     }
     
     private void OnGUI()
     {
         Event e = Event.current;
-
+    
         if (e.isKey && e.keyCode != KeyCode.None && controlButtons.ContainsKey(e.keyCode))
         {
             if (e.type == EventType.KeyDown)
