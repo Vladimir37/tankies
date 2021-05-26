@@ -5,6 +5,8 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private Rigidbody2D rigidbody;
+
+    private Animator animator;
     
     private Direction direction;
 
@@ -33,7 +35,21 @@ public class Bullet : MonoBehaviour
         direction = bulletDirection;
         speed = bulletSpeed;
         rigidbody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, direction.MyRotation));
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        speed = 0;
+        Destroy(GetComponent<BoxCollider2D>());
+        
+        animator.SetTrigger("Hit");
+        
+        if (collision.CompareTag("Obstacle"))
+        {
+            Destroy(collision.transform.gameObject);
+        }
     }
 }

@@ -22,6 +22,9 @@ public class MapManager : MonoBehaviour
 
     [SerializeField]
     private Tilemap ground;
+
+    [SerializeField]
+    private Tilemap obstacles;
     
     // Start is called before the first frame update
     void Start()

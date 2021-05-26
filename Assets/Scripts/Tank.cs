@@ -8,7 +8,7 @@ public abstract class Tank : MonoBehaviour
     private Direction direction;
 
     private Rigidbody2D myRigidbody;
-
+    
     [SerializeField]
     private Transform tankSprite;
 
@@ -79,11 +79,11 @@ public abstract class Tank : MonoBehaviour
         {
             if (newDirection.MyOrientation == Orientation.Horizontal)
             {
-                transform.position = new Vector3(transform.position.x, CalculatePosition(transform.position.y), 0);
+                transform.position = new Vector3(transform.position.x, CalculateTankPosition(transform.position.y), 0);
             }
             else if (newDirection.MyOrientation == Orientation.Vertical)
             {
-                transform.position = new Vector3(CalculatePosition(transform.position.x), transform.position.y, 0);
+                transform.position = new Vector3(CalculateTankPosition(transform.position.x), transform.position.y, 0);
             }
         }
         
@@ -97,13 +97,20 @@ public abstract class Tank : MonoBehaviour
         {
             timeFromLastAttack = 0;
 
-            Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity).GetComponent<Bullet>();
+            Bullet bullet = Instantiate(bulletPrefab, CalculateBulletPosition(), Quaternion.identity).GetComponent<Bullet>();
             bullet.Initialize(MyDirection, 10);
         }
     }
 
-    private float CalculatePosition(float position)
+    private float CalculateTankPosition(float position)
     {
         return (float)Math.Round(position * 2, MidpointRounding.AwayFromZero) / 2;
+    }
+
+    private Vector3 CalculateBulletPosition()
+    {
+        Vector3 bulletPosition = transform.position + (Vector3)direction.MyDirectionVector * 0.95f;
+
+        return bulletPosition;
     }
 }
