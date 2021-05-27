@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D myRigidbody;
 
-    private Animator animator;
+    private Animator myAnimator;
     
     private Direction direction;
 
@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
     {
         if (!isHitted)
         {
-            rigidbody.velocity = direction.MyDirectionVector.normalized * speed;
+            myRigidbody.velocity = direction.MyDirectionVector.normalized * speed;
         }
     }
 
@@ -34,8 +34,8 @@ public class Bullet : MonoBehaviour
         isHitted = false;
         direction = bulletDirection;
         speed = bulletSpeed;
-        rigidbody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        myRigidbody = GetComponent<Rigidbody2D>();
+        myAnimator = GetComponent<Animator>();
         
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, direction.MyRotation));
     }
@@ -45,11 +45,13 @@ public class Bullet : MonoBehaviour
         speed = 0;
         Destroy(GetComponent<BoxCollider2D>());
         
-        animator.SetTrigger("Hit");
-        
-        if (collision.CompareTag("Obstacle"))
+        myAnimator.SetTrigger("Hit");
+
+        Damageable target = collision.transform.gameObject.GetComponent<Damageable>();
+
+        if (target != null)
         {
-            Destroy(collision.transform.gameObject);
+            target.Hit();
         }
     }
 }

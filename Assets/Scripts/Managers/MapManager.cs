@@ -37,9 +37,4 @@ public class MapManager : MonoBehaviour
     {
         
     }
-
-    // public Vector3 GetTilePosition(Vector3Int target)
-    // {
-    //     return ground.GetTile(target);
-    // }
 }

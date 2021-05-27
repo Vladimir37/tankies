@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Tank : MonoBehaviour
+public abstract class Tank : Damageable
 {
     private Direction direction;
 
@@ -14,9 +14,7 @@ public abstract class Tank : MonoBehaviour
 
     [SerializeField]
     private GameObject bulletPrefab;
-
-    private int health;
-
+    
     private int speed;
 
     private float attackCooldown;
@@ -52,9 +50,10 @@ public abstract class Tank : MonoBehaviour
 
     protected void TankInitialize(int tankHealth, int tankSpeed, float tankFireCooldown)
     {
-        health = tankHealth;
+        HealthInit(tankHealth);
         speed = tankSpeed;
         attackCooldown = tankFireCooldown;
+        timeFromLastAttack = tankFireCooldown;
     }
 
     protected void Move()
@@ -101,7 +100,7 @@ public abstract class Tank : MonoBehaviour
             bullet.Initialize(MyDirection, 10);
         }
     }
-
+    
     private float CalculateTankPosition(float position)
     {
         return (float)Math.Round(position * 2, MidpointRounding.AwayFromZero) / 2;
@@ -109,7 +108,7 @@ public abstract class Tank : MonoBehaviour
 
     private Vector3 CalculateBulletPosition()
     {
-        Vector3 bulletPosition = transform.position + (Vector3)direction.MyDirectionVector * 0.95f;
+        Vector3 bulletPosition = transform.position + (Vector3)direction.MyDirectionVector * 0.7f;
 
         return bulletPosition;
     }
