@@ -10,6 +10,8 @@ public class Bullet : MonoBehaviour
     
     private Direction direction;
 
+    private Tank emitter;
+
     private float speed;
 
     private bool isHitted;
@@ -29,11 +31,12 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void Initialize(Direction bulletDirection, float bulletSpeed)
+    public void Initialize(Direction bulletDirection, float bulletSpeed, Tank bulletEmitter)
     {
         isHitted = false;
         direction = bulletDirection;
         speed = bulletSpeed;
+        emitter = bulletEmitter;
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         
@@ -42,12 +45,19 @@ public class Bullet : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Damageable target = collision.transform.gameObject.GetComponent<Damageable>();
+
+        if (emitter == target)
+        {
+            return;
+        }
+        
         speed = 0;
         Destroy(GetComponent<BoxCollider2D>());
         
         myAnimator.SetTrigger("Hit");
 
-        Damageable target = collision.transform.gameObject.GetComponent<Damageable>();
+        
 
         if (target != null)
         {

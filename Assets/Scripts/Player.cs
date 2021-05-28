@@ -16,7 +16,7 @@ public class Player : Tank
     public override void Start()
     {
         // DEBUG
-        TankInitialize(5, 5, 1);
+        TankInitialize(DirectionManager.Instance.Directions[CardinalPoint.North], 5, 5, 1);
         
         base.Start();
     }
@@ -56,5 +56,12 @@ public class Player : Tank
                 }
             }
         }
+    }
+    
+    public override void Death()
+    {
+        base.Death();
+        
+        GameManager.Instance.LoseTheGame(GameManager.DefeatTypes.TankDestroyed);
     }
 }

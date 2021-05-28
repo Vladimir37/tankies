@@ -30,7 +30,7 @@ public abstract class Tank : Damageable
     {
         isMoved = false;
         myRigidbody = GetComponent<Rigidbody2D>();
-        direction = DirectionManager.Instance.Directions[CardinalPoint.North];
+        Stop();
     }
 
     // Update is called once per frame
@@ -48,22 +48,27 @@ public abstract class Tank : Damageable
         }
     }
 
-    protected void TankInitialize(int tankHealth, int tankSpeed, float tankFireCooldown)
+    protected void TankInitialize(Direction tankDirection, int tankHealth, int tankSpeed, float tankFireCooldown)
     {
         HealthInit(tankHealth);
         speed = tankSpeed;
         attackCooldown = tankFireCooldown;
         timeFromLastAttack = tankFireCooldown;
+        
+        direction = DirectionManager.Instance.Directions[CardinalPoint.North];
+        ChangeDirection(tankDirection);
     }
-
+    
     protected void Move()
     {
         isMoved = true;
+        myRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     protected void Stop()
     {
         isMoved = false;
+        myRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
     protected void ChangeDirection(Direction newDirection)
@@ -97,7 +102,7 @@ public abstract class Tank : Damageable
             timeFromLastAttack = 0;
 
             Bullet bullet = Instantiate(bulletPrefab, CalculateBulletPosition(), Quaternion.identity).GetComponent<Bullet>();
-            bullet.Initialize(MyDirection, 10);
+            bullet.Initialize(MyDirection, 10, this);
         }
     }
     
@@ -108,7 +113,7 @@ public abstract class Tank : Damageable
 
     private Vector3 CalculateBulletPosition()
     {
-        Vector3 bulletPosition = transform.position + (Vector3)direction.MyDirectionVector * 0.7f;
+        Vector3 bulletPosition = transform.position + (Vector3)direction.MyDirectionVector * 0.5f;
 
         return bulletPosition;
     }
