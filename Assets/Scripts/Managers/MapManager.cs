@@ -37,4 +37,6 @@ public class MapManager : MonoBehaviour
     {
         
     }
+    
+    // TODO метод возврата краёв карты, вода, кусты
 }

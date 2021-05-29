@@ -19,9 +19,10 @@ public class AIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // foreach (Enemy enemy in enemies)
-        // {
-        //     enemy.At;
-        // }
+        foreach (Enemy enemy in enemies)
+        {
+            // enemy.Attack();
+            // Debug.Log(enemy.IsMoved);
+        }
     }
 }

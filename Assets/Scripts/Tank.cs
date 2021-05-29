@@ -21,14 +21,16 @@ public abstract class Tank : Damageable
 
     private float timeFromLastAttack;
 
-    private bool isMoved;
+    public bool CanAttack => timeFromLastAttack >= attackCooldown;
+
+    public bool IsMoved { get; private set; }
 
     public Direction MyDirection => direction;
 
     // Start is called before the first frame update
     public virtual void Start()
     {
-        isMoved = false;
+        IsMoved = false;
         myRigidbody = GetComponent<Rigidbody2D>();
         Stop();
     }
@@ -38,7 +40,7 @@ public abstract class Tank : Damageable
     {
         timeFromLastAttack += Time.deltaTime;
         
-        if (isMoved)
+        if (IsMoved)
         {
             myRigidbody.velocity = MyDirection.MyDirectionVector.normalized * speed;
         }
@@ -61,13 +63,20 @@ public abstract class Tank : Damageable
     
     protected void Move()
     {
-        isMoved = true;
-        myRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        IsMoved = true;
+        if (direction.MyOrientation == Orientation.Vertical)
+        {
+            myRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
+        }
+        else if (direction.MyOrientation == Orientation.Horizontal)
+        {
+            myRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionY;;
+        }
     }
 
     protected void Stop()
     {
-        isMoved = false;
+        IsMoved = false;
         myRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
@@ -95,9 +104,9 @@ public abstract class Tank : Damageable
         tankSprite.rotation = Quaternion.Euler(new Vector3(0, 0, MyDirection.MyRotation));
     }
 
-    protected void Attack()
+    public void Attack()
     {
-        if (timeFromLastAttack >= attackCooldown)
+        if (CanAttack)
         {
             timeFromLastAttack = 0;
 
