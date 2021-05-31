@@ -7,6 +7,7 @@ TagManager:
   - Obstacle
   - Enemy
   - HQ
+  - Water
   layers:
   - Default
   - TransparentFX
@@ -44,9 +45,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Tanks
+    uniqueID: 2606647151
+    locked: 0
   - name: Obstacles
     uniqueID: 640347103
     locked: 0
-  - name: Tanks
-    uniqueID: 2606647151
+  - name: Plants
+    uniqueID: 2584465729
     locked: 0

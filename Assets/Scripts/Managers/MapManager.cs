@@ -26,17 +26,16 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private Tilemap obstacles;
     
+    public MapBoundaries GroundMapBoundaries { get; private set; }
+    
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
+        BoundsInt cellBounds = ground.cellBounds;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        MapCell min = new MapCell(cellBounds.min.x, cellBounds.min.y);
+        MapCell max = new MapCell(cellBounds.max.x - 1, cellBounds.max.y - 1);
+
+        GroundMapBoundaries = new MapBoundaries(min, max);
     }
-    
-    // TODO метод возврата краёв карты, вода, кусты
 }

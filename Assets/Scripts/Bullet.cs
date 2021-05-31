@@ -45,12 +45,19 @@ public class Bullet : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.transform.CompareTag("Water"))
+        {
+            return;
+        }
+        
         Damageable target = collision.transform.gameObject.GetComponent<Damageable>();
 
         if (emitter == target)
         {
             return;
         }
+
+        
         
         speed = 0;
         Destroy(GetComponent<BoxCollider2D>());
