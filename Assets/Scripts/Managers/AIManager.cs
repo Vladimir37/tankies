@@ -21,7 +21,7 @@ public class AIManager : MonoBehaviour
     {
         foreach (Enemy enemy in enemies)
         {
-            // enemy.Attack();
+            enemy.Attack();
             // Debug.Log(enemy.IsMoved);
         }
     }

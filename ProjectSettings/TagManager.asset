@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - HQ
   - Water
+  - Bullet
   layers:
   - Default
   - TransparentFX

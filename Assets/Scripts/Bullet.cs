@@ -45,7 +45,10 @@ public class Bullet : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.CompareTag("Water"))
+        if (
+            collision.transform.CompareTag("Water") ||
+            collision.transform.CompareTag("Bullet")
+            )
         {
             return;
         }
@@ -57,11 +60,20 @@ public class Bullet : MonoBehaviour
             return;
         }
 
+        if (
+            emitter.transform.gameObject.CompareTag("Enemy") && 
+            target != null && 
+            target.CompareTag("Enemy")
+            )
+        {
+            return;
+        }
+
         
         
         speed = 0;
         Destroy(GetComponent<BoxCollider2D>());
-        
+
         myAnimator.SetTrigger("Hit");
 
         

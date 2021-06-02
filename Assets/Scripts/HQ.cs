@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class HQ : Damageable
 {
+    [SerializeField]
+    private Transform hqAliveIcon;
+    
+    [SerializeField]
+    private Transform hqDestroyedIcon;
+    
     // Start is called before the first frame update
     void Start()
     {
-        // DEBUG
         HealthInit(1);
     }
 
     public override void Death()
     {
-        base.Death();
+        hqAliveIcon.gameObject.SetActive(false);
+        hqDestroyedIcon.gameObject.SetActive(true);
         
         GameManager.Instance.LoseTheGame(GameManager.DefeatTypes.HQDestroyed);
     }
