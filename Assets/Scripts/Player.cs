@@ -16,7 +16,7 @@ public class Player : Tank
     public override void Start()
     {
         // DEBUG
-        TankInitialize(DirectionManager.Instance.Directions[CardinalPoint.North], 5, 5, 1);
+        TankInitialize(DirectionManager.Instance.Directions[CardinalPoint.North], 5, 5, 0.3f);
         
         base.Start();
     }

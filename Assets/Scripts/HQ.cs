@@ -20,7 +20,7 @@ public class HQ : Damageable
     {
         hqAliveIcon.gameObject.SetActive(false);
         hqDestroyedIcon.gameObject.SetActive(true);
-        
+
         GameManager.Instance.LoseTheGame(GameManager.DefeatTypes.HQDestroyed);
     }
 }

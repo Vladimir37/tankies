@@ -49,7 +49,7 @@ public class Enemy : Tank
     public void Init()
     {
         // DEBUG DATA
-        TankInitialize(DirectionManager.Instance.Directions[CardinalPoint.South], 3, 5, 1);
+        TankInitialize(DirectionManager.Instance.Directions[CardinalPoint.South], 1, 5, 1);
     }
     
     public void MoveTo(Orientation axis, float point)
@@ -122,5 +122,12 @@ public class Enemy : Tank
         }
         
         Stop();
+    }
+
+    public override void Death()
+    {
+        base.Death();
+        
+        EnemyManager.Instance.RemoveTank(this);
     }
 }

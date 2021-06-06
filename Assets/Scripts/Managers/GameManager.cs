@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Text defeatTypeText;
     
+    [SerializeField]
+    private GameObject winWindow;
+    
     private Dictionary<DefeatTypes, String> defeatText = new Dictionary<DefeatTypes, string>()
     {
         {DefeatTypes.TankDestroyed, "Ваш танк уничтожен"},
@@ -45,6 +48,13 @@ public class GameManager : MonoBehaviour
         defeatTypeText.text = defeatText[type];
         defeatWindow.SetActive(true);
 
+        Time.timeScale = 0;
+    }
+
+    public void WinTheGame()
+    {
+        winWindow.SetActive(true);
+        
         Time.timeScale = 0;
     }
 }
